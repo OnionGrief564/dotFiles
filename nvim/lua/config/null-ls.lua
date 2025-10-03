@@ -1,4 +1,4 @@
--- NULL-LS.NVIM
+-- NULL-LS.NVIM Which is actually nvimtools/none-ls.nvim
 -- LSP formatting filter
 local lsp_formatting = function(bufnr)
 	vim.lsp.buf.format({

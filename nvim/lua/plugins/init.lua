@@ -57,24 +57,34 @@ return {
 		'nvim-lualine/lualine.nvim',
 		dependencies = { 'nvim-tree/nvim-web-devicons' }
 	},
-
+{ -- Autocompletion
+    'saghen/blink.cmp',
+    event = 'VimEnter',
+    version = '1.*',
+    dependencies = {
+      -- Snippet Engine
+      {
+        'L3MON4D3/LuaSnip',
+        version = '2.*',
+      },
+    },
+  },
 	-- Auto-completion engine
-	{
-		"hrsh7th/nvim-cmp",
-		dependencies = {
-			"lspkind.nvim",
-			"hrsh7th/cmp-nvim-lsp", -- lsp auto-completion
-			"hrsh7th/cmp-buffer", -- buffer auto-completion
-			"hrsh7th/cmp-path", -- path auto-completion
-			"hrsh7th/cmp-cmdline", -- cmdline auto-completion
-		},
-		config = function()
-			require("config.nvim-cmp")
-		end,
-	},
+	-- "nvimtools/none-ls.nvim",
+	-- {
+	-- 	"hrsh7th/nvim-cmp",
+	-- 	event = 'InsertEnter',
+	-- 	dependencies = {
+	-- 		"lspkind.nvim",
+	-- 		"hrsh7th/cmp-nvim-lsp", -- lsp auto-completion
+	-- 		"hrsh7th/cmp-buffer", -- buffer auto-completion
+	-- 		"hrsh7th/cmp-path", -- path auto-completion
+	-- 		"hrsh7th/cmp-cmdline", -- cmdline auto-completion
+	-- 		{
+	-- 			"L3MON4D3/LuaSnip",
+	-- 			version = "v2.*",
+	-- 		},
+	-- 	},
+	-- },
 	-- Code snippet engine
-	{
-		"L3MON4D3/LuaSnip",
-		version = "v2.*",
-	},
 }

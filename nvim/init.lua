@@ -12,6 +12,7 @@ vim.opt.inccommand = 'split'
 vim.opt.completeopt = {'menuone','noselect','noinsert'}
 vim.opt.mouse = 'a'
 vim.opt.laststatus = 3
+vim.opt.guifont='FiraCode:h16'
 
 -- Telescope
 vim.keymap.set('n', '<c-p>', '<cmd>Telescope find_files<cr>')
@@ -27,27 +28,23 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 vim.cmd.highlight({"WinSeparator", "guibg=None"})
 
 -- requires for lazy and other configs
-require('config.lazy')
+require('config')
 
 -- Chose random color Scheme
-function chooseRandomColorScheme(colors)
+function ChooseRandomColorScheme(colors)
 	math.randomseed(os.time())
 	local randIndex = math.random(#colors)
-	chosenColor = colors[randIndex]
+	local chosenColor = colors[randIndex]
 	vim.cmd.colorscheme(chosenColor)
 	return chosenColor
 end
-mycolors = {'lucario', 'retrobox', 'badwolf', 'brogrammer', 'molokai', 'janah', 'nord', 'habamax'}
-newColor = chooseRandomColorScheme(mycolors)
+Mycolors = {'lucario', 'retrobox', 'badwolf', 'brogrammer', 'molokai', 'janah', 'nord', 'habamax'}
+local newColor = ChooseRandomColorScheme(Mycolors)
 vim.notify("Chose "..newColor.." Colorscheme")
-vim.api.nvim_create_user_command('ChooseRandomColorScheme', 'lua chooseRandomColorScheme(mycolors)', {})
-
--- LSP Package Manager
-require("config.lsp")
+vim.api.nvim_create_user_command('ChooseRandomColorScheme', 'lua ChooseRandomColorScheme(Mycolors)', {})
 
 vim.cmd('let g:sneak#label = 1')
 
 
 require('mini.operators').setup()
 require('mini.pairs').setup()
-require('config.lualine')

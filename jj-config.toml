@@ -1,0 +1,19 @@
+#"$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
+
+[user]
+email = "OnionGrief42@gmail.com"
+name = "OnionGrief564"
+
+[ui]
+default-command = "st"
+editor = "code.cmd -w"
+[ui.movement]
+edit = true
+
+[aliases]
+d = ["diff"]
+n = ["next"]
+p = ["prev"]
+
+[git]
+push-new-bookmarks = true

@@ -24,5 +24,9 @@ FUNCTION last_vim {nvim -c 'norm \`0'}
 Set-Alias lvim last_vim
 
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
+Set-PSReadLineKeyHandler -Chord Ctrl+k -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+Set-PSReadLineKeyHandler -Chord Ctrl+J -Function HistorySearchForward
 Set-PSReadLineKeyHandler -Key Tab -Function Complete
+
+Invoke-Expression (& { (jj util completion power-shell | Out-String) })

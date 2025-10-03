@@ -1,23 +1,25 @@
 require('mason').setup({
-    ui = {
-        icons = {
-            package_installed = "✓",
-            package_pending = "➜",
-            package_uninstalled = "✗"
-        }
-    }
+	ui = {
+		icons = {
+			package_installed = "✓",
+			package_pending = "➜",
+			package_uninstalled = "✗"
+		}
+	}
 })
 
-mason_lspconfig = require('mason-lspconfig')
+local mason_lspconfig = require('mason-lspconfig')
 mason_lspconfig.setup({
-    -- A list of servers to automatically install if they're not already installed
-    ensure_installed = { 'lua_ls' },
+	-- A list of servers to automatically install if they're not already installed
+	ensure_installed = { 'lua_ls' },
 })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+-- merging with blink.cmp
+capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities({}, false))
 
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
+	client.server_capabilities.signatureHelperProvider = false
 	local nmap = function(keys, func, desc)
 		if desc then
 			desc = "LSP: " .. desc
@@ -26,6 +28,7 @@ local on_attach = function(_, bufnr)
 		vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
 	end
 
+	-- LSP mappings
 	nmap("<F2>", vim.lsp.buf.rename, "[R]e[n]ame")
 	nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
@@ -34,7 +37,6 @@ local on_attach = function(_, bufnr)
 	nmap("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
 	nmap("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
 	nmap("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-	nmap("<leader>fs", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[F]ind [S]ymbols")
 
 	-- See `:help K` for why this keymap
 	nmap("K", vim.lsp.buf.hover, "Hover Documentation")
@@ -50,31 +52,47 @@ local on_attach = function(_, bufnr)
 	nmap("<F3>", vim.lsp.buf.format, "Format current buffer with LSP")
 end
 
--- require("lspconfig")
-
+-- Dynamic lspconfig servers :)
 local servers = {
 	pylsp = {
 		settings = {
 			pylsp = {
-			  plugins = {
-				pycodestyle = {
-				  ignore = {'W391'},
-				  maxLineLength = 120
+				plugins = {
+					pycodestyle = {
+						ignore = { 'W391' },
+						maxLineLength = 120
+					}
 				}
-			  }
 			}
-		  }
+		}
 	},
 	rust_analyzer = {
-	  settings = {
-		['rust-analyzer'] = {
-		  diagnostics = {
-			enable = false;
-		  }
+		settings = {
+			['rust-analyzer'] = {
+				diagnostics = {
+					enable = false,
+				}
+			}
 		}
-	  }
 	},
-	lua_ls = {}
+	lua_ls = {
+		Lua = {
+			diagnostics = {
+				-- Get the language server to recognize the `vim` global
+				-- Now, you don't get error/warning "Undefined global `vim`".
+				globals = { 'vim' },
+			},
+			workspace = {
+				-- Make the server aware of Neovim runtime files
+				library = vim.api.nvim_get_runtime_file("", true),
+			},
+			-- By default, lua-language-server sends anonymized data to its developers. Stop it using the following.
+			telemetry = {
+				enable = false,
+			},
+		}
+	},
+	clangd = {}
 }
 
 mason_lspconfig.setup_handlers({
@@ -86,4 +104,3 @@ mason_lspconfig.setup_handlers({
 		})
 	end,
 })
-
