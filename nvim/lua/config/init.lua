@@ -1,5 +1,4 @@
 require("config.lazy")
 require("config.lsp")
 require("config.lualine")
--- require("config.null-ls")
 require("config.nvim-cmp")

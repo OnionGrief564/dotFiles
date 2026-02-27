@@ -37,3 +37,5 @@
 
 [pull]
     default = current
+[credential "https://codeberg.org"]
+	provider = generic

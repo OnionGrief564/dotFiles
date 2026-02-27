@@ -1,86 +1,66 @@
-require('mason').setup({
+require("mason").setup({
 	ui = {
 		icons = {
 			package_installed = "✓",
 			package_pending = "➜",
-			package_uninstalled = "✗"
-		}
-	}
+			package_uninstalled = "✗",
+		},
+	},
 })
 
-local mason_lspconfig = require('mason-lspconfig')
+local mason_lspconfig = require("mason-lspconfig")
 mason_lspconfig.setup({
 	-- A list of servers to automatically install if they're not already installed
-	ensure_installed = { 'lua_ls' },
+	ensure_installed = { "lua_ls" },
 })
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
--- merging with blink.cmp
-capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities({}, false))
+-- LSP mappings
+vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, { desc = "[R]e[n]ame" })
+vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "[C]ode [A]ction" })
 
-local on_attach = function(client, bufnr)
-	client.server_capabilities.signatureHelperProvider = false
-	local nmap = function(keys, func, desc)
-		if desc then
-			desc = "LSP: " .. desc
-		end
+vim.keymap.set("n", "gD", vim.lsp.buf.definition, { desc = "[G]oto [D]efinition" })
+vim.keymap.set("n", "gR", require("telescope.builtin").lsp_references, { desc = "[G]oto [R]eferences" })
+vim.keymap.set("n", "gI", vim.lsp.buf.implementation, { desc = "[G]oto [I]mplementation" })
+vim.keymap.set("n", "<leader>ds", require("telescope.builtin").lsp_document_symbols, { desc = "[D]ocument [S]ymbols" })
 
-		vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
-	end
+-- See `:help K` for why this keymap
+vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover Documentation" })
+vim.keymap.set('n', '<leader>l', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
-	-- LSP mappings
-	nmap("<F2>", vim.lsp.buf.rename, "[R]e[n]ame")
-	nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+-- Lesser used LSP functionality
+vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "[G]oto [D]eclaration" })
+vim.keymap.set("n", "<F3>", vim.lsp.buf.format, { desc = "Format current buffer with LSP" })
 
-	nmap("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
-	nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-	nmap("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
-	nmap("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
-	nmap("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-
-	-- See `:help K` for why this keymap
-	nmap("K", vim.lsp.buf.hover, "Hover Documentation")
-	nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
-
-	-- Lesser used LSP functionality
-	nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-
-	-- Create a command `:Format` local to the LSP buffer
-	vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
-		vim.lsp.buf.format()
-	end, { desc = "Format current buffer with LSP" })
-	nmap("<F3>", vim.lsp.buf.format, "Format current buffer with LSP")
-end
 
 -- Dynamic lspconfig servers :)
-local servers = {
+local servers_configs = {
 	pylsp = {
 		settings = {
 			pylsp = {
 				plugins = {
 					pycodestyle = {
-						ignore = { 'W391' },
-						maxLineLength = 120
-					}
-				}
-			}
-		}
+						ignore = { "W391" },
+						maxLineLength = 120,
+					},
+				},
+			},
+		},
 	},
 	rust_analyzer = {
 		settings = {
-			['rust-analyzer'] = {
+			["rust-analyzer"] = {
 				diagnostics = {
 					enable = false,
-				}
-			}
-		}
+				},
+			},
+		},
 	},
 	lua_ls = {
 		Lua = {
 			diagnostics = {
 				-- Get the language server to recognize the `vim` global
 				-- Now, you don't get error/warning "Undefined global `vim`".
-				globals = { 'vim' },
+				globals = { "vim" },
 			},
 			workspace = {
 				-- Make the server aware of Neovim runtime files
@@ -90,17 +70,14 @@ local servers = {
 			telemetry = {
 				enable = false,
 			},
-		}
+		},
 	},
-	clangd = {}
+	clangd = {},
 }
 
-mason_lspconfig.setup_handlers({
-	function(server_name)
-		require("lspconfig")[server_name].setup({
-			capabilities = capabilities,
-			on_attach = on_attach,
-			settings = servers[server_name],
-		})
-	end,
-})
+for server, setting in pairs(servers_configs) do
+	vim.lsp.config(server, {
+		settings = setting,
+	})
+	vim.lsp.enable(server)
+end

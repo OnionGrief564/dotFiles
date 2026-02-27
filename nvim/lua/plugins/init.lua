@@ -1,5 +1,8 @@
 -- Main file, contains all major plugins
 return {
+	"folke/lazydev.nvim",
+
+	-- Themes
 	'gruvbox-community/gruvbox',
 	'raphamorim/lucario',
 	'sjl/badwolf',
@@ -7,6 +10,7 @@ return {
 	'mhinz/vim-janah',
 	'marciomazza/vim-brogrammer-theme',
 	'tomasr/molokai',
+
 	'hiphish/rainbow-delimiters.nvim',
 	'tpope/vim-repeat',
 	'tpope/vim-surround', -- ys(motion)[ to add [, cs[{ to replace to { and ds{ to delete
@@ -35,10 +39,6 @@ return {
 	},
 	'jremmen/vim-ripgrep',
 	'sjl/gundo.vim',
-	-- 'kana/vim-textobj-user',
-	-- 'kana/vim-textobj-entire',
-	-- 'kana/vim-textobj-indent',
-	-- 'thinca/vim-textobj-comment', -- Doesn't work
 	'nvim-lua/popup.nvim',
 	{
 		'nvim-telescope/telescope.nvim',
@@ -57,34 +57,17 @@ return {
 		'nvim-lualine/lualine.nvim',
 		dependencies = { 'nvim-tree/nvim-web-devicons' }
 	},
-{ -- Autocompletion
-    'saghen/blink.cmp',
-    event = 'VimEnter',
-    version = '1.*',
-    dependencies = {
-      -- Snippet Engine
-      {
-        'L3MON4D3/LuaSnip',
-        version = '2.*',
-      },
-    },
-  },
-	-- Auto-completion engine
-	-- "nvimtools/none-ls.nvim",
-	-- {
-	-- 	"hrsh7th/nvim-cmp",
-	-- 	event = 'InsertEnter',
-	-- 	dependencies = {
-	-- 		"lspkind.nvim",
-	-- 		"hrsh7th/cmp-nvim-lsp", -- lsp auto-completion
-	-- 		"hrsh7th/cmp-buffer", -- buffer auto-completion
-	-- 		"hrsh7th/cmp-path", -- path auto-completion
-	-- 		"hrsh7th/cmp-cmdline", -- cmdline auto-completion
-	-- 		{
-	-- 			"L3MON4D3/LuaSnip",
-	-- 			version = "v2.*",
-	-- 		},
-	-- 	},
-	-- },
-	-- Code snippet engine
+	{
+		"folke/which-key.nvim",
+		-- event = "VeryLazy",
+		keys = {
+			{
+				"<leader>?",
+				function()
+					require("which-key").show({ global = false })
+				end,
+				desc = "Buffer Local Keymaps (which-key)",
+			},
+		},
+	}
 }

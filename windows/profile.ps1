@@ -30,3 +30,6 @@ Set-PSReadLineKeyHandler -Chord Ctrl+J -Function HistorySearchForward
 Set-PSReadLineKeyHandler -Key Tab -Function Complete
 
 Invoke-Expression (& { (jj util completion power-shell | Out-String) })
+if (Get-Module -ListAvailable -Name posh-git) {
+		Import-Module posh-git
+}

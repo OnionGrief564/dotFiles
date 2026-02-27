@@ -7,6 +7,7 @@ name = "OnionGrief564"
 [ui]
 default-command = "st"
 editor = "code.cmd -w"
+merge-editor = "vscode"
 [ui.movement]
 edit = true
 
@@ -14,6 +15,7 @@ edit = true
 d = ["diff"]
 n = ["next"]
 p = ["prev"]
+e = ["edit"]
 
 [git]
 push-new-bookmarks = true

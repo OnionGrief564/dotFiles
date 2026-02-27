@@ -12,6 +12,7 @@ vim.opt.inccommand = 'split'
 vim.opt.completeopt = {'menuone','noselect','noinsert'}
 vim.opt.mouse = 'a'
 vim.opt.laststatus = 3
+vim.opt.winborder = "solid"
 vim.opt.guifont='FiraCode:h16'
 
 -- Telescope
