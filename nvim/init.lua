@@ -3,7 +3,7 @@
 -- vim.g.loaded_netrw = 1
 -- vim.g.loaded_netrwPlugin = 1
 
-vim.cmd('source C:/Users/Itamar/AppData/Local/nvim/vim/without_plugins.vim')
+vim.cmd('source ' .. vim.fn.stdpath("config") .. '/vim/without_plugins.vim')
 
 -- Setting command to edit this file
 vim.api.nvim_create_user_command('EditConfig', 'e C:/Users/Itamar/AppData/Local/nvim/init.lua', {desc='Edit the config file'})
